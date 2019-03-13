@@ -11,6 +11,14 @@ const config = {
   direction: SideEnum.left,  
 }
 
+var calcValueToAddLeft = function(x, tenth) {
+  return config.horizontalSegments - Math.floor(x / tenth);
+}
+
+var calcValueToAddRight = function(x, tenth) {
+  return Math.floor(x / tenth);
+}
+
 var whithen = function(timestamp) {
   let t0 = performance.now();
 
@@ -18,10 +26,12 @@ var whithen = function(timestamp) {
   const height = imageData.height;
   const tenth = width / config.horizontalSegments;
   const lastValueToCheck = config.direction === SideEnum.left ? 0 : imageData.data.length - 1;
+  const calcValueToAddFunc = config.direction === SideEnum.left ? calcValueToAddLeft : calcValueToAddRight;
 
-  for (let y = 0; y < height; y++) {  
+  for (let y = 0; y < height; y++) {      
     for (let x = 0; x < width; x++) {      
-      const valueToAdd = config.horizontalSegments - Math.floor(x / tenth) * config.direction;
+      const valueToAdd = calcValueToAddFunc(x, tenth);
+
       imageData.data[y * width + x] += valueToAdd;      
     }
   }
