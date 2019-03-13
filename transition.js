@@ -1,25 +1,40 @@
+const SideEnum = Object.freeze({"left": 1, "right": -1});
+
 let canvas;
 let context;
 let imageData;
 const buffer = [];
+const _numberOfIndicesPerPixel = 4;
+
+const config = {
+  horizontalSegments: 10,
+  direction: SideEnum.left,  
+}
 
 var whithen = function(timestamp) {
   let t0 = performance.now();
 
-  for (let i = 0; i < imageData.data.length; i++) {
-    imageData.data[i] += 1;    
+  const width = imageData.width * _numberOfIndicesPerPixel;  
+  const height = imageData.height;
+  const tenth = width / config.horizontalSegments;
+  const lastValueToCheck = config.direction === SideEnum.left ? 0 : imageData.data.length - 1;
+
+  for (let y = 0; y < height; y++) {  
+    for (let x = 0; x < width; x++) {      
+      const valueToAdd = config.horizontalSegments - Math.floor(x / tenth) * config.direction;
+      imageData.data[y * width + x] += valueToAdd;      
+    }
   }
-  
+
   context.putImageData(imageData, 0, 0);
   let t1 = performance.now();
   console.log((t1 - t0) + " milliseconds.");
 
-  if (imageData.data[0] < 250) {
+  if (imageData.data[lastValueToCheck] < 250) {
     window.requestAnimationFrame(whithen); 
   }      
 };
 
-// turn one white line a certain color
 window.addEventListener("load", function() {
   canvas = document.getElementById('main-canvas');
   canvas.onclick = function() {
