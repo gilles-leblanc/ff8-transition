@@ -8,7 +8,7 @@ const _numberOfIndicesPerPixel = 4;
 const xProgress = [];
 
 const config = {
-  direction: SideEnum.left,  
+  direction: SideEnum.right,  
   frameLimitFactor: 1,        // 1 is normal speed  
   horizontalSegments: 10,
   initSpread: 0.2,
@@ -20,12 +20,14 @@ var initTransition = function() {
   const width = imageData.width * _numberOfIndicesPerPixel;  
   const height = imageData.height;
   const spread = width * config.initSpread;
-  
+  const initialX = config.direction === SideEnum.left ? 0 : width;
+  const multiplier = config.direction === SideEnum.left ? 1 : -1;
+
   for (let y = 0; y < height; y++) {      
     let numberOfPixelsToInit = Math.floor(Math.random() * Math.floor(spread));
     xProgress.push(numberOfPixelsToInit);
     for (let x = 0; x < numberOfPixelsToInit; x++) {
-      imageData.data[y * width + x] = config.onColor;
+      imageData.data[y * width + (initialX + x * multiplier)] = config.onColor;
     }    
   }
   
