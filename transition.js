@@ -1,22 +1,27 @@
 const SideEnum = Object.freeze({"left": 1, "right": -1});
+const Pass = Object.freeze({"first": 1, "second": 2});
 
 let canvas;
 let context;
 let imageData;
 const buffer = [];
 const _numberOfIndicesPerPixel = 4;
-const xProgress = [];
+let xProgress = [];
+const onColor = 255;
+const offColor = 0;
 
 const config = {
-  direction: SideEnum.right,  
-  frameLimitFactor: 1,        // 1 is normal speed  
+  direction: SideEnum.left,  
+  frameLimitFactor: 1,        
   horizontalSegments: 10,
   initSpread: 0.2,
-  onColor: 255,
-  offColor: 0,
+  color: onColor,
+  currentPass: Pass.first,
 }
 
 var initTransition = function() {
+  xProgress = [];
+
   const width = imageData.width * _numberOfIndicesPerPixel;  
   const height = imageData.height;
   const spread = width * config.initSpread;
@@ -25,9 +30,9 @@ var initTransition = function() {
 
   for (let y = 0; y < height; y++) {      
     let numberOfPixelsToInit = Math.floor(Math.random() * Math.floor(spread));
-    xProgress.push(numberOfPixelsToInit);
+    xProgress.push(numberOfPixelsToInit);    
     for (let x = 0; x < numberOfPixelsToInit; x++) {
-      imageData.data[y * width + (initialX + x * multiplier)] = config.onColor;
+      imageData.data[y * width + (initialX + x * multiplier)] = config.color;
     }    
   }
   
@@ -42,11 +47,8 @@ var calcValueToAddRight = function(x, segmentValue) {
   return Math.floor(x / segmentValue);
 }
 
-var whithen = function(timestamp) {
-  const lastValueToCheck = config.direction === SideEnum.right ? 0 : imageData.data.length - 1;
-  if (Math.floor(timestamp % config.frameLimitFactor) === 0) {
-    let t0 = performance.now();
-
+var colorSwoosh = function(timestamp) {
+  function color(multiplier) {
     const width = imageData.width * _numberOfIndicesPerPixel;  
     const height = imageData.height;
     const segmentValue = width / config.horizontalSegments;    
@@ -55,18 +57,35 @@ var whithen = function(timestamp) {
     for (let y = 0; y < height; y++) {      
       for (let x = xProgress[y]; x < width; x++) {      
         const valueToAdd = calcValueToAddFunc(x, segmentValue + xProgress[y]);
-        imageData.data[y * width + x] += valueToAdd;      
+        imageData.data[y * width + x] += valueToAdd * multiplier;      
       }
     }
   
     context.putImageData(imageData, 0, 0);
-    let t1 = performance.now();
-    console.log((t1 - t0) + " milliseconds.");
+  }
+
+  const lastValueToCheck = config.direction === SideEnum.right ? 0 : imageData.data.length - 1;
+  if (Math.floor(timestamp % config.frameLimitFactor) === 0) {
+    color(config.currentPass === Pass.first ? 1 : -1);    
   }   
 
-  if (imageData.data[lastValueToCheck] < config.onColor) {
-    window.requestAnimationFrame(whithen); 
-  }      
+  // TODO: right side doesn't work
+
+  if (config.currentPass === Pass.first) {
+    if (imageData.data[lastValueToCheck] < config.color) {
+      window.requestAnimationFrame(colorSwoosh); 
+    } else {
+      config.color = offColor;
+      config.currentPass = Pass.second;
+      config.frameLimitFactor = 1;
+      initTransition();
+      window.requestAnimationFrame(colorSwoosh);
+    }  
+  } else {
+    if (imageData.data[lastValueToCheck] > config.color) {
+      window.requestAnimationFrame(colorSwoosh);
+    }
+  }
 };
 
 window.addEventListener("load", function() {
@@ -80,23 +99,8 @@ window.addEventListener("load", function() {
     console.log(imageData);
 
     initTransition();
-    window.requestAnimationFrame(whithen);
+    window.requestAnimationFrame(colorSwoosh);
   };
-  
-  // start at current completion when whithening
-  // speed of line could be relative to init completion ???  
-  // splotching effect see https://www.youtube.com/watch?v=9RoHMNXE6YM&t=32s
 
-  // darken 
-
-  // when almost all white, start transforming to black instantly on the same side and each line at different speeed goes black to the opposing side
-    // start black at about 80% to 90% done on each line. 
-    // all lines do not go to same speed
-
-  // process has not 100% finished when this happens
-  // turn white screen to black
-
-  // fade all to black
-
-  // fade in to new image
+  // see https://www.youtube.com/watch?v=9RoHMNXE6YM&t=32s
 });
