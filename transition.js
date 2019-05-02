@@ -5,10 +5,11 @@ let canvas;
 let context;
 let imageData;
 const buffer = [];
-const _numberOfIndicesPerPixel = 4;
+const numberOfIndicesPerPixel = 4;
 let xProgress = [];
 const onColor = 255;
 const offColor = 0;
+let height, width, segmentLength;
 
 const config = {
   direction: SideEnum.left,  
@@ -21,9 +22,7 @@ const config = {
 
 var initTransition = function() {
   xProgress = [];
-
-  const width = imageData.width * _numberOfIndicesPerPixel;  
-  const height = imageData.height;
+  
   const spread = width * config.initSpread;
   const initialX = config.direction === SideEnum.left ? 0 : width;
   const multiplier = config.direction === SideEnum.left ? 1 : -1;
@@ -39,24 +38,22 @@ var initTransition = function() {
   context.putImageData(imageData, 0, 0);
 }
 
-var calcValueToAddLeft = function(x, segmentValue) {
-  return config.horizontalSegments - Math.floor(x / segmentValue);
+var calcValueToAddLeft = function(x, segmentLength) {
+  return config.horizontalSegments - Math.floor(x / segmentLength);
 }
 
-var calcValueToAddRight = function(x, segmentValue) {
-  return Math.floor(x / segmentValue);
+var calcValueToAddRight = function(x, segmentLength) {
+  return Math.floor(x / segmentLength);
 }
 
 var colorSwoosh = function(timestamp) {
-  function color(multiplier) {
-    const width = imageData.width * _numberOfIndicesPerPixel;  
-    const height = imageData.height;
-    const segmentValue = width / config.horizontalSegments;    
+  
+  function color(multiplier) {    
     const calcValueToAddFunc = config.direction === SideEnum.left ? calcValueToAddLeft : calcValueToAddRight;
   
     for (let y = 0; y < height; y++) {      
       for (let x = xProgress[y]; x < width; x++) {      
-        const valueToAdd = calcValueToAddFunc(x, segmentValue + xProgress[y]);
+        const valueToAdd = calcValueToAddFunc(x, segmentLength + xProgress[y]);
         imageData.data[y * width + x] += valueToAdd * multiplier;      
       }
     }
@@ -64,11 +61,11 @@ var colorSwoosh = function(timestamp) {
     context.putImageData(imageData, 0, 0);
   }
 
-  const lastValueToCheck = config.direction === SideEnum.right ? 0 : imageData.data.length - 1;
   if (Math.floor(timestamp % config.frameLimitFactor) === 0) {
     color(config.currentPass === Pass.first ? 1 : -1);    
   }   
-
+  
+  const lastValueToCheck = config.direction === SideEnum.right ? 0 : imageData.data.length - 1;
   // TODO: right side doesn't work
 
   if (config.currentPass === Pass.first) {
@@ -97,6 +94,10 @@ window.addEventListener("load", function() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
     console.log(imageData);
+
+    width = imageData.width * numberOfIndicesPerPixel;  
+    height = imageData.height;
+    segmentLength = width / config.horizontalSegments;
 
     initTransition();
     window.requestAnimationFrame(colorSwoosh);
