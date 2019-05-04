@@ -9,10 +9,10 @@ const numberOfIndicesPerPixel = 4;
 let xProgress = [];
 const onColor = 255;
 const offColor = 0;
-let height, width, segmentLength;
+let height, width, segmentLength, sideMultiplier, initialX;
 
 const config = {
-  direction: SideEnum.left,  
+  direction: SideEnum.right,  
   frameLimitFactor: 1,        
   horizontalSegments: 10,
   initSpread: 0.2,
@@ -22,39 +22,29 @@ const config = {
 
 var initTransition = function() {
   xProgress = [];
-  
   const spread = width * config.initSpread;
-  const initialX = config.direction === SideEnum.left ? 0 : width;
-  const multiplier = config.direction === SideEnum.left ? 1 : -1;
 
   for (let y = 0; y < height; y++) {      
     let numberOfPixelsToInit = Math.floor(Math.random() * Math.floor(spread));
     xProgress.push(numberOfPixelsToInit);    
     for (let x = 0; x < numberOfPixelsToInit; x++) {
-      imageData.data[y * width + (initialX + x * multiplier)] = config.color;
+      imageData.data[y * width + (initialX + x * sideMultiplier)] = config.color;
     }    
   }
   
   context.putImageData(imageData, 0, 0);
 }
 
-var calcValueToAddLeft = function(x, segmentLength) {
-  return config.horizontalSegments - Math.floor(x / segmentLength);
-}
-
-var calcValueToAddRight = function(x, segmentLength) {
-  return Math.floor(x / segmentLength);
-}
-
-var colorSwoosh = function(timestamp) {
-  
-  function color(multiplier) {    
-    const calcValueToAddFunc = config.direction === SideEnum.left ? calcValueToAddLeft : calcValueToAddRight;
-  
+var colorSwoosh = function(timestamp) {  
+  function color(passMultiplier) {
+    const calcValueToAddFunc = function(x, segmentLength) {
+      return config.horizontalSegments - Math.floor(x / segmentLength);
+    }
+    
     for (let y = 0; y < height; y++) {      
       for (let x = xProgress[y]; x < width; x++) {      
         const valueToAdd = calcValueToAddFunc(x, segmentLength + xProgress[y]);
-        imageData.data[y * width + x] += valueToAdd * multiplier;      
+        imageData.data[y * width + (initialX + x * sideMultiplier)] += valueToAdd * passMultiplier;      
       }
     }
   
@@ -98,6 +88,8 @@ window.addEventListener("load", function() {
     width = imageData.width * numberOfIndicesPerPixel;  
     height = imageData.height;
     segmentLength = width / config.horizontalSegments;
+    sideMultiplier = config.direction === SideEnum.left ? 1 : -1;
+    initialX = config.direction === SideEnum.left ? 0 : width;  
 
     initTransition();
     window.requestAnimationFrame(colorSwoosh);
