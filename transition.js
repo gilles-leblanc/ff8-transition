@@ -84,6 +84,10 @@ window.addEventListener("load", function() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
+    if (Math.floor(Math.random() * 2) === 0) {
+      config.direction = SideEnum.right;
+    }
+
     width = imageData.width * numberOfIndicesPerPixel;  
     height = imageData.height;
     segmentLength = width / config.horizontalSegments;
