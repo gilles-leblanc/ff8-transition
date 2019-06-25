@@ -12,7 +12,7 @@ const offColor = 0;
 let height, width, segmentLength, sideMultiplier, initialX;
 
 const config = {
-  direction: SideEnum.left,  
+  direction: SideEnum.right,  
   frameLimitFactor: 1,        
   horizontalSegments: 10,
   initSpread: 0.2,
@@ -79,14 +79,13 @@ window.addEventListener("load", function() {
   canvas = document.getElementById('main-canvas');
   canvas.onclick = function() {
     context = canvas.getContext('2d', { alpha: false });
-    imageData = context.createImageData(canvas.width, canvas.height);    
-  
-    context.fillStyle = 'black';
-    context.fillRect(0, 0, canvas.width, canvas.height);
 
-    if (Math.floor(Math.random() * 2) === 0) {
-      config.direction = SideEnum.right;
-    }
+    context.drawImage(document.getElementById('ff8'), 0, 0);
+    imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+    // if (Math.floor(Math.random() * 2) === 0) {
+    //   config.direction = SideEnum.right;
+    // }
 
     width = imageData.width * numberOfIndicesPerPixel;  
     height = imageData.height;
@@ -96,6 +95,7 @@ window.addEventListener("load", function() {
 
     initTransition();
     window.requestAnimationFrame(colorSwoosh);
+    canvas.onclick = null;
   };
 
   // see https://www.youtube.com/watch?v=9RoHMNXE6YM&t=32s
