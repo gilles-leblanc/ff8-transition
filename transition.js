@@ -9,27 +9,31 @@ const numberOfIndicesPerPixel = 4;
 let xProgress = [];
 const onColor = 255;
 const offColor = 0;
-let height, width, segmentLength, sideMultiplier, initialX;
+let height, width, segmentLength, sideMultiplier, initialX, lineHeight;
 
 const config = {
+  color: onColor,
+  currentPass: Pass.first,
   direction: SideEnum.left,  
   frameLimitFactor: 1,        
   horizontalSegments: 10,
   initSpread: 0.2,
-  color: onColor,
-  currentPass: Pass.first,
+  lineHeight: 4,
 }
 
 var initTransition = function() {
   xProgress = [];
   const spread = width * config.initSpread;
 
-  for (let y = 0; y < height; y++) {      
+  for (let y = 0; y < height; y += config.lineHeight) {      
     let numberOfPixelsToInit = Math.floor(Math.random() * Math.floor(spread));
-    xProgress.push(numberOfPixelsToInit);    
 
-    for (let x = 0; x <= numberOfPixelsToInit; x++) {
-      imageData.data[y * width + (initialX + x * sideMultiplier)] = config.color;
+    for (let z = 0; z < config.lineHeight; z++) {
+      xProgress.push(numberOfPixelsToInit);    
+
+      for (let x = 0; x <= numberOfPixelsToInit; x++) {
+        imageData.data[(y + z) * width + (initialX + x * sideMultiplier)] = config.color;
+      }    
     }    
   }
   
@@ -103,5 +107,5 @@ window.addEventListener("load", function() {
     canvas.onclick = null;
   };
 
-  // see https://www.youtube.com/watch?v=9RoHMNXE6YM&t=32s
+  // see https://www.youtube.com/watch?v=9RoHMNXE6YM&t=31s
 });
