@@ -1,11 +1,23 @@
 
-html, body {
+html, body, main {
   height: 100%;
 }
 
-body {
+body main {  
   align-items: center;
-  background-color: black;
   display: flex;
   justify-content: center;
+}
+
+main div {
+  display: flex;
+  justify-content: center;
+}
+
+.controls-area {
+  flex-grow: 1;
+}
+
+.canvas-area {
+  flex-grow: 2;
 }

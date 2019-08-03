@@ -81,14 +81,13 @@ var colorSwoosh = function(timestamp) {
 
 window.addEventListener("load", function() {
   canvas = document.getElementById('main-canvas');
-  context = canvas.getContext('2d', { alpha: false });
+  startButton = document.getElementById('start-button');
   
-  context.fillStyle = '#ffffff';
-  context.font = 'bold 30px sans-serif';
-  context.textBaseline = 'bottom';
-  context.fillText('Click me!', canvas.width / 2 - 30, canvas.height / 2 - 30);
-
-  canvas.onclick = function() {   
+  context = canvas.getContext('2d', { alpha: false });
+  context.fillStyle = "black";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  
+  startButton.onclick = function() {   
     context.drawImage(document.getElementById('ff8'), 0, 0);
     imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
