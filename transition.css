@@ -11,13 +11,19 @@ body main {
 
 main div {
   display: flex;
-  justify-content: center;
 }
 
 .controls-area {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
+  padding-left: 2em;
+}
+
+.controls-area select, .controls-area button {
+  width: 50%;
 }
 
 .canvas-area {
-  flex-grow: 2;
+  flex-grow: 1;
 }

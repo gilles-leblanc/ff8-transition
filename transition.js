@@ -56,7 +56,7 @@ var colorSwoosh = function(timestamp) {
     context.putImageData(imageData, 0, 0);
   }
 
-  if (Math.floor(timestamp % config.frameLimitFactor) === 0) {
+  if (config.frameLimitFactor === 0 || Math.floor(timestamp % config.frameLimitFactor) === 0) {
     color(config.currentPass === Pass.first ? 1 : -1);    
   }   
   
@@ -71,6 +71,10 @@ var colorSwoosh = function(timestamp) {
       config.frameLimitFactor = 1;
       initTransition();
       window.requestAnimationFrame(colorSwoosh);
+
+      setTimeout(() => {
+        document.getElementById('start-button').disabled = false;
+      }, 1000);
     }  
   } else {
     if (imageData.data[lastValueToCheck] > config.color) {
@@ -87,23 +91,35 @@ window.addEventListener("load", function() {
   context.fillStyle = "black";
   context.fillRect(0, 0, canvas.width, canvas.height);
   
-  startButton.onclick = function() {   
+  startButton.onclick = function() {
+    startButton.disabled = true;
+    startButton.blur();
+    config.color = onColor;   
+    config.currentPass = Pass.first;
+
+    config.frameLimitFactor = +document.getElementById('frameSkip').value;
+    config.horizontalSegments = +document.getElementById('segmentation').value;
+    config.initSpread = +document.getElementById('initSpread').value;
+    config.lineHeight = +document.getElementById('lineHeight').value;
+
     context.drawImage(document.getElementById('ff8'), 0, 0);
-    imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-    if (Math.floor(Math.random() * 2) === 0) {
-      config.direction = SideEnum.right;
-    }
+    setTimeout(() => {
+      imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-    width = imageData.width * numberOfIndicesPerPixel;  
-    height = imageData.height;
-    segmentLength = width / config.horizontalSegments;
-    sideMultiplier = config.direction === SideEnum.left ? 1 : -1;
-    initialX = config.direction === SideEnum.left ? 0 : width - 1;  
+      if (Math.floor(Math.random() * 2) === 0) {
+        config.direction = SideEnum.right;
+      }
 
-    initTransition();
-    window.requestAnimationFrame(colorSwoosh);
-    canvas.onclick = null;
+      width = imageData.width * numberOfIndicesPerPixel;  
+      height = imageData.height;
+      segmentLength = width / config.horizontalSegments;
+      sideMultiplier = config.direction === SideEnum.left ? 1 : -1;
+      initialX = config.direction === SideEnum.left ? 0 : width - 1;  
+
+      initTransition();
+      window.requestAnimationFrame(colorSwoosh);
+    }, 1000);    
   };
 
   // see https://www.youtube.com/watch?v=9RoHMNXE6YM&t=31s
