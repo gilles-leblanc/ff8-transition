@@ -111,7 +111,11 @@ window.addEventListener("load", function() {
     config.initSpread = +document.getElementById('initSpread').value;
     config.lineHeight = +document.getElementById('lineHeight').value;
 
-    context.drawImage(document.getElementById('ff8'), 0, 0);
+    if (document.documentElement.clientWidth <= 800) {
+      config.lineHeight = 2;
+    }
+
+    context.drawImage(document.getElementById('ff8'), 0, 0, canvasWidth, canvasHeight);
 
     setTimeout(() => {
       imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
