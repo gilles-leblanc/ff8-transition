@@ -87,15 +87,24 @@ window.addEventListener("load", function() {
   canvas = document.getElementById('main-canvas');
   startButton = document.getElementById('start-button');
   
+  const canvasWidth = canvas.getBoundingClientRect().width;
+  const canvasHeight = canvas.getBoundingClientRect().height;
+  canvas.setAttribute("width", canvasWidth);
+  canvas.setAttribute("height", canvasHeight);
+
   context = canvas.getContext('2d', { alpha: false });
   context.fillStyle = "black";
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillRect(0, 0, canvasWidth, canvasHeight);
   
   startButton.onclick = function() {
     startButton.disabled = true;
     startButton.blur();
     config.color = onColor;   
     config.currentPass = Pass.first;
+
+    if (Math.floor(Math.random() * 2) === 0) {
+      config.direction = SideEnum.right;
+    }
 
     config.frameLimitFactor = +document.getElementById('frameSkip').value;
     config.horizontalSegments = +document.getElementById('segmentation').value;
@@ -105,11 +114,7 @@ window.addEventListener("load", function() {
     context.drawImage(document.getElementById('ff8'), 0, 0);
 
     setTimeout(() => {
-      imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-      if (Math.floor(Math.random() * 2) === 0) {
-        config.direction = SideEnum.right;
-      }
+      imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
 
       width = imageData.width * numberOfIndicesPerPixel;  
       height = imageData.height;

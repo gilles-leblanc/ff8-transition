@@ -27,3 +27,49 @@ main div {
 .canvas-area {
   flex-grow: 1;
 }
+
+#ff8 { 
+  display: none
+}
+
+#main-canvas, #ff8 {
+  width: 800px;
+  height: 600px;
+}
+
+@media (max-width: 1000px) {
+  #main-canvas, #ff8 {
+    width: 600px;
+    height: 450px;
+  } 
+}
+
+@media (max-width: 800px) {
+  #main-canvas, #ff8 {
+    width: 400px;
+    height: 300px;
+  }
+  
+  main {
+    flex-direction: column;
+  }
+
+  .controls-area {
+    justify-content: center;
+  }
+
+  .controls-area label, select {
+    display: none;
+  }
+
+  .controls-area button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  #main-canvas, #ff8 {
+    width: 300px;
+    height: 225px;
+  }
+}
