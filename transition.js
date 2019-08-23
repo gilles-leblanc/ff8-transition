@@ -10,6 +10,7 @@ let xProgress = [];
 const onColor = 255;
 const offColor = 0;
 let height, width, segmentLength, sideMultiplier, initialX, lineHeight;
+let numberOfFramesRan;
 
 const config = {
   color: onColor,
@@ -61,9 +62,10 @@ var colorSwoosh = function(timestamp) {
   }   
   
   const lastValueToCheck = config.direction === SideEnum.right ? 1 : imageData.data.length - numberOfIndicesPerPixel;
+  numberOfFramesRan++;
 
   if (config.currentPass === Pass.first) {
-    if (imageData.data[lastValueToCheck] < config.color) {
+    if (numberOfFramesRan < 100 && imageData.data[lastValueToCheck] < config.color) {
       window.requestAnimationFrame(colorSwoosh); 
     } else {
       config.color = offColor;
@@ -97,6 +99,7 @@ window.addEventListener("load", function() {
   context.fillRect(0, 0, canvasWidth, canvasHeight);
   
   startButton.onclick = function() {
+    numberOfFramesRan = 0;
     startButton.disabled = true;
     startButton.blur();
     config.color = onColor;   
