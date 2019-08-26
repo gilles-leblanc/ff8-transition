@@ -4,7 +4,6 @@ const Pass = Object.freeze({"first": 1, "second": 2});
 let canvas;
 let context;
 let imageData;
-const buffer = [];
 const numberOfIndicesPerPixel = 4;
 let xProgress = [];
 const onColor = 255;
@@ -76,7 +75,7 @@ var colorSwoosh = function(timestamp) {
 
       setTimeout(() => {
         document.getElementById('start-button').disabled = false;
-      }, 1000);
+      }, 2000);
     }  
   } else {
     if (imageData.data[lastValueToCheck] > config.color) {
