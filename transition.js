@@ -64,13 +64,13 @@ var colorSwoosh = function(timestamp) {
 
   if (config.currentPass === Pass.first) {
     if (numberOfFramesRan < 100 && imageData.data[lastValueToCheck] < config.color) {
-      window.requestAnimationFrame(colorSwoosh); 
+      requestAnimationFrame(colorSwoosh); 
     } else {
       config.color = offColor;
       config.currentPass = Pass.second;
       config.frameLimitFactor = 1;
       initTransition();
-      window.requestAnimationFrame(colorSwoosh);
+      requestAnimationFrame(colorSwoosh);
 
       setTimeout(() => {
         document.getElementById('start-button').disabled = false;
@@ -78,12 +78,12 @@ var colorSwoosh = function(timestamp) {
     }  
   } else {
     if (imageData.data[lastValueToCheck] > config.color) {
-      window.requestAnimationFrame(colorSwoosh);
+      requestAnimationFrame(colorSwoosh);
     }
   }
 };
 
-window.addEventListener("load", function() {
+addEventListener("load", function() {
   const canvas = document.getElementById('main-canvas');
   startButton = document.getElementById('start-button');
   
@@ -128,7 +128,7 @@ window.addEventListener("load", function() {
       initialX = config.direction === SideEnum.left ? 0 : width - 1;  
 
       initTransition();
-      window.requestAnimationFrame(colorSwoosh);
+      requestAnimationFrame(colorSwoosh);
     }, 1000);    
   };
 
