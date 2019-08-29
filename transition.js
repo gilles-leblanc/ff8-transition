@@ -40,7 +40,7 @@ var initTransition = function() {
 }
 
 var colorSwoosh = function(timestamp) {  
-  function color(passMultiplier) {
+  const color = function(passMultiplier) {
     const calcValueToAddFunc = function(x, segmentLength) {
       return config.horizontalSegments - Math.floor(x / segmentLength);
     }
