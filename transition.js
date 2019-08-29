@@ -89,8 +89,8 @@ window.addEventListener("load", function() {
   
   const canvasWidth = canvas.getBoundingClientRect().width;
   const canvasHeight = canvas.getBoundingClientRect().height;
-  canvas.setAttribute("width", canvasWidth);
-  canvas.setAttribute("height", canvasHeight);
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
 
   context = canvas.getContext('2d', { alpha: false });
   context.fillStyle = "black";
