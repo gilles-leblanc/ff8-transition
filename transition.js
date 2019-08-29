@@ -1,7 +1,6 @@
 const SideEnum = Object.freeze({"left": 1, "right": -1});
 const Pass = Object.freeze({"first": 1, "second": 2});
 
-let canvas;
 let context;
 let imageData;
 const numberOfIndicesPerPixel = 4;
@@ -85,7 +84,7 @@ var colorSwoosh = function(timestamp) {
 };
 
 window.addEventListener("load", function() {
-  canvas = document.getElementById('main-canvas');
+  const canvas = document.getElementById('main-canvas');
   startButton = document.getElementById('start-button');
   
   const canvasWidth = canvas.getBoundingClientRect().width;
