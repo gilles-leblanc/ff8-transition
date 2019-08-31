@@ -1,5 +1,5 @@
-const SideEnum = Object.freeze({"left": 1, "right": -1});
-const Pass = Object.freeze({"first": 1, "second": 2});
+const sideEnum = Object.freeze({"left": 1, "right": -1});
+const pass = Object.freeze({"first": 1, "second": 2});
 
 let context;
 let imageData;
@@ -12,8 +12,8 @@ let numberOfFramesRan;
 
 const config = {
   color: onColor,
-  currentPass: Pass.first,
-  direction: SideEnum.left,  
+  currentPass: pass.first,
+  direction: sideEnum.left,  
   frameLimitFactor: 1,        
   horizontalSegments: 10,
   initSpread: 0.2,
@@ -58,18 +58,18 @@ var colorSwoosh = function(timestamp) {
   }
 
   if (config.frameLimitFactor === 0 || Math.floor(timestamp % config.frameLimitFactor) === 0) {
-    color(config.currentPass === Pass.first ? 1 : -1);    
+    color(config.currentPass === pass.first ? 1 : -1);    
   }   
   
-  const lastValueToCheck = config.direction === SideEnum.right ? 1 : imageData.data.length - numberOfIndicesPerPixel;
+  const lastValueToCheck = config.direction === sideEnum.right ? 1 : imageData.data.length - numberOfIndicesPerPixel;
   numberOfFramesRan++;
 
-  if (config.currentPass === Pass.first) {
+  if (config.currentPass === pass.first) {
     if (numberOfFramesRan < 100 && imageData.data[lastValueToCheck] < config.color) {
       requestAnimationFrame(colorSwoosh); 
     } else {
       config.color = offColor;
-      config.currentPass = Pass.second;
+      config.currentPass = pass.second;
       config.frameLimitFactor = 1;
       initTransition();
       requestAnimationFrame(colorSwoosh);
@@ -103,10 +103,10 @@ addEventListener("load", function() {
     startButton.disabled = true;
     startButton.blur();
     config.color = onColor;   
-    config.currentPass = Pass.first;
+    config.currentPass = pass.first;
 
     if (Math.floor(Math.random() * 2) === 0) {
-      config.direction = SideEnum.right;
+      config.direction = sideEnum.right;
     }
 
     config.frameLimitFactor = +document.getElementById('frameSkip').value;
@@ -126,8 +126,8 @@ addEventListener("load", function() {
       width = imageData.width * numberOfIndicesPerPixel;  
       height = imageData.height;
       segmentLength = width / config.horizontalSegments;
-      sideMultiplier = config.direction === SideEnum.left ? 1 : -1;
-      initialX = config.direction === SideEnum.left ? 0 : width - 1;  
+      sideMultiplier = config.direction === sideEnum.left ? 1 : -1;
+      initialX = config.direction === sideEnum.left ? 0 : width - 1;  
 
       initTransition();
       requestAnimationFrame(colorSwoosh);
