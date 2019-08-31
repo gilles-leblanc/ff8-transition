@@ -23,15 +23,17 @@ const config = {
 var initTransition = function() {
   xProgress.length = 0;
   const spread = width * config.initSpread;
+  const lineHeight = config.lineHeight;
+  const color = config.color;
 
-  for (let y = 0; y < height; y += config.lineHeight) {      
+  for (let y = 0; y < height; y += lineHeight) {      
     let numberOfPixelsToInit = Math.floor(Math.random() * spread);
 
-    for (let z = 0; z < config.lineHeight; z++) {
+    for (let z = 0; z < lineHeight; z++) {
       xProgress.push(numberOfPixelsToInit);    
 
       for (let x = 0; x <= numberOfPixelsToInit; x++) {
-        imageData.data[(y + z) * width + (initialX + x * sideMultiplier)] = config.color;
+        imageData.data[(y + z) * width + (initialX + x * sideMultiplier)] = color;
       }    
     }    
   }
