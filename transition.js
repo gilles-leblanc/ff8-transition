@@ -98,7 +98,7 @@ addEventListener("load", function() {
   context.fillStyle = "black";
   context.fillRect(0, 0, canvasWidth, canvasHeight);
   
-  startButton.onclick = function() {
+  startButton.addEventListener('click', function() {
     numberOfFramesRan = 0;
     startButton.disabled = true;
     startButton.blur();
@@ -132,7 +132,7 @@ addEventListener("load", function() {
       initTransition();
       requestAnimationFrame(colorSwoosh);
     }, 1000);    
-  };
+  });
 
   // see https://www.youtube.com/watch?v=9RoHMNXE6YM&t=31s
 });
