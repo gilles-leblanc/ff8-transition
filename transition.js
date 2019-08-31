@@ -4,7 +4,7 @@ const Pass = Object.freeze({"first": 1, "second": 2});
 let context;
 let imageData;
 const numberOfIndicesPerPixel = 4;
-let xProgress = [];
+const xProgress = [];
 const onColor = 255;
 const offColor = 0;
 let height, width, segmentLength, sideMultiplier, initialX, lineHeight;
@@ -21,7 +21,7 @@ const config = {
 }
 
 var initTransition = function() {
-  xProgress = [];
+  xProgress.length = 0;
   const spread = width * config.initSpread;
 
   for (let y = 0; y < height; y += config.lineHeight) {      
