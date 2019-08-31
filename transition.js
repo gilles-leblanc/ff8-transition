@@ -25,7 +25,7 @@ var initTransition = function() {
   const spread = width * config.initSpread;
 
   for (let y = 0; y < height; y += config.lineHeight) {      
-    let numberOfPixelsToInit = Math.floor(Math.random() * Math.floor(spread));
+    let numberOfPixelsToInit = Math.floor(Math.random() * spread);
 
     for (let z = 0; z < config.lineHeight; z++) {
       xProgress.push(numberOfPixelsToInit);    
