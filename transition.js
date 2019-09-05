@@ -25,7 +25,11 @@ var initTransition = function() {
   const spread = width * config.initSpread;
   const lineHeight = config.lineHeight;
   const color = config.color;
-
+  const colorAsText = color === 0 ? 'black' : 'white';
+  const canvasInitialX = Math.ceil(initialX / numberOfIndicesPerPixel);
+  
+  context.fillStyle = colorAsText;
+  
   for (let y = 0; y < height; y += lineHeight) {      
     let numberOfPixelsToInit = Math.floor(Math.random() * spread);
 
@@ -34,11 +38,11 @@ var initTransition = function() {
 
       for (let x = 0; x <= numberOfPixelsToInit; x++) {
         imageData.data[(y + z) * width + (initialX + x * sideMultiplier)] = color;
-      }    
+      }  
     }    
+    
+    context.fillRect(canvasInitialX, y, sideMultiplier * numberOfPixelsToInit / numberOfIndicesPerPixel, lineHeight);
   }
-  
-  context.putImageData(imageData, 0, 0);
 }
 
 var colorSwoosh = function(timestamp) {  
