@@ -57,7 +57,7 @@ var colorSwoosh = function(timestamp) {
         imageData.data[y * width + (initialX + x * sideMultiplier)] += valueToAdd * passMultiplier;
       }
     }
-    
+ 
     context.putImageData(imageData, 0, 0);
   }
 
@@ -75,15 +75,16 @@ var colorSwoosh = function(timestamp) {
       config.color = offColor;
       config.currentPass = pass.second;
       config.frameLimitFactor = 1;
+      numberOfFramesRan = 0;
       initTransition();
       requestAnimationFrame(colorSwoosh);
 
       setTimeout(() => {
         document.getElementById('start-button').disabled = false;
-      }, 2000);
+      }, 3000);
     }  
   } else {
-    if (imageData.data[lastValueToCheck] > config.color) {
+    if (numberOfFramesRan < 100 && imageData.data[lastValueToCheck] > config.color) {
       requestAnimationFrame(colorSwoosh);
     }
   }
