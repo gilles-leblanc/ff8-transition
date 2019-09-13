@@ -20,8 +20,12 @@ main div {
   padding-left: 2em;
 }
 
-.controls-area select, .controls-area button {
+.controls-area select, .controls-area button, .controls-area p {
   width: 50%;
+}
+
+.controls-area p {
+  max-width: 18em;
 }
 
 .canvas-area {
