@@ -70,6 +70,17 @@ var colorSwoosh = function(timestamp) {
 
   if (config.currentPass === pass.first) {
     if (numberOfFramesRan < 100 && imageData.data[lastValueToCheck] < config.color) {
+      if (numberOfFramesRan % 10 === 0) {
+        // whithen everything a bit
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            if (imageData.data[y * width + x] < 200) {
+              imageData.data[y * width + x] += 10;
+            }
+          }
+        }
+      }
+
       requestAnimationFrame(colorSwoosh); 
     } else {
       config.color = offColor;
