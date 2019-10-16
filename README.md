@@ -14,7 +14,7 @@ As in the case with the game, the initial direction of the effect is chosen at r
 
 ## See it in action
 
-Address
+https://gilles-leblanc.github.io/ff8-transition/
 
 ## Running the project
 
