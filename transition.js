@@ -92,6 +92,13 @@ var colorSwoosh = function(timestamp) {
 
       setTimeout(() => {
         document.getElementById('start-button').disabled = false;
+        
+        // There is a bug and memory leak that happens only on Firefox (not on Chrome, Edge or Safari)
+        // this is to bypass this by reloading the page
+        const isFirefox = typeof InstallTrigger !== 'undefined';
+        if (isFirefox) {
+          window.location.reload(false);
+        }
       }, 3000);
     }  
   } else {
